@@ -20,8 +20,13 @@ import javax.json.stream.JsonGeneratorFactory;
 import javax.json.stream.JsonParser;
 import javax.json.stream.JsonParserFactory;
 
+import net.vvakame.stream.JsonGeneratorFactoryImpl;
 import net.vvakame.stream.JsonGeneratorImpl;
 
+/**
+ * Implementation for {@link JsonProvider}.
+ * @author vvakame
+ */
 public class JsonProviderImpl extends JsonProvider {
 
 	@Override
@@ -48,9 +53,8 @@ public class JsonProviderImpl extends JsonProvider {
 	}
 
 	@Override
-	public JsonGeneratorFactory createGeneratorFactory(Map<String, ?> arg0) {
-		// TODO Auto-generated method stub
-		return null;
+	public JsonGeneratorFactory createGeneratorFactory(Map<String, ?> config) {
+		return new JsonGeneratorFactoryImpl(config);
 	}
 
 	@Override
