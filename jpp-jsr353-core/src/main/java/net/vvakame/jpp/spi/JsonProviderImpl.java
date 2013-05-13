@@ -1,6 +1,7 @@
 package net.vvakame.jpp.spi;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
@@ -22,24 +23,14 @@ import javax.json.stream.JsonParserFactory;
 
 import net.vvakame.stream.JsonGeneratorFactoryImpl;
 import net.vvakame.stream.JsonGeneratorImpl;
+import net.vvakame.stream.JsonParserFactoryImpl;
+import net.vvakame.stream.JsonParserImpl;
 
 /**
  * Implementation for {@link JsonProvider}.
  * @author vvakame
  */
 public class JsonProviderImpl extends JsonProvider {
-
-	@Override
-	public JsonArrayBuilder createArrayBuilder() {
-		// TODO
-		return null;
-	}
-
-	@Override
-	public JsonBuilderFactory createBuilderFactory(Map<String, ?> arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public JsonGenerator createGenerator(Writer writer) {
@@ -58,61 +49,71 @@ public class JsonProviderImpl extends JsonProvider {
 	}
 
 	@Override
+	public JsonParser createParser(Reader reader) {
+		return new JsonParserImpl(reader);
+	}
+
+	@Override
+	public JsonParser createParser(InputStream is) {
+		InputStreamReader reader = new InputStreamReader(is);
+		return new JsonParserImpl(reader);
+	}
+
+	@Override
+	public JsonParserFactory createParserFactory(Map<String, ?> config) {
+		return new JsonParserFactoryImpl(config);
+	}
+
+	@Override
+	public JsonBuilderFactory createBuilderFactory(Map<String, ?> config) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public JsonObjectBuilder createObjectBuilder() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public JsonParser createParser(Reader arg0) {
+	public JsonArrayBuilder createArrayBuilder() {
+		// TODO
+		return null;
+	}
+
+	@Override
+	public JsonReader createReader(Reader reader) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public JsonParser createParser(InputStream arg0) {
+	public JsonReader createReader(InputStream is) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public JsonParserFactory createParserFactory(Map<String, ?> arg0) {
+	public JsonReaderFactory createReaderFactory(Map<String, ?> config) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public JsonReader createReader(Reader arg0) {
+	public JsonWriter createWriter(Writer writer) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public JsonReader createReader(InputStream arg0) {
+	public JsonWriter createWriter(OutputStream os) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public JsonReaderFactory createReaderFactory(Map<String, ?> arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public JsonWriter createWriter(Writer arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public JsonWriter createWriter(OutputStream arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public JsonWriterFactory createWriterFactory(Map<String, ?> arg0) {
+	public JsonWriterFactory createWriterFactory(Map<String, ?> config) {
 		// TODO Auto-generated method stub
 		return null;
 	}
