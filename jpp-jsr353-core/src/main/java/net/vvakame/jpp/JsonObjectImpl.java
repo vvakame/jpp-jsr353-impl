@@ -174,5 +174,9 @@ public class JsonObjectImpl implements JsonObject {
 		return !values.containsKey(name) || values.get(name).getValueType() == ValueType.NULL;
 	}
 
+	void add(String name, JsonValue value) {
+		values.put(name, value);
+	}
+
 	// TODO equals, hashCode, toString
 }

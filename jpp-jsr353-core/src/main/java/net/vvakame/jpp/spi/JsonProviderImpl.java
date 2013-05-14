@@ -21,6 +21,13 @@ import javax.json.stream.JsonGeneratorFactory;
 import javax.json.stream.JsonParser;
 import javax.json.stream.JsonParserFactory;
 
+import net.vvakame.jpp.JsonArrayBuilderImpl;
+import net.vvakame.jpp.JsonBuilderFactoryImpl;
+import net.vvakame.jpp.JsonObjectBuilderImpl;
+import net.vvakame.jpp.JsonReaderFactoryImpl;
+import net.vvakame.jpp.JsonReaderImpl;
+import net.vvakame.jpp.JsonWriterFactoryImpl;
+import net.vvakame.jpp.JsonWriterImpl;
 import net.vvakame.stream.JsonGeneratorFactoryImpl;
 import net.vvakame.stream.JsonGeneratorImpl;
 import net.vvakame.stream.JsonParserFactoryImpl;
@@ -66,55 +73,48 @@ public class JsonProviderImpl extends JsonProvider {
 
 	@Override
 	public JsonBuilderFactory createBuilderFactory(Map<String, ?> config) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JsonBuilderFactoryImpl(config);
 	}
 
 	@Override
 	public JsonObjectBuilder createObjectBuilder() {
-		// TODO Auto-generated method stub
-		return null;
+		return new JsonObjectBuilderImpl();
 	}
 
 	@Override
 	public JsonArrayBuilder createArrayBuilder() {
-		// TODO
-		return null;
+		return new JsonArrayBuilderImpl();
 	}
 
 	@Override
 	public JsonReader createReader(Reader reader) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JsonReaderImpl(reader);
 	}
 
 	@Override
 	public JsonReader createReader(InputStream is) {
-		// TODO Auto-generated method stub
-		return null;
+		InputStreamReader reader = new InputStreamReader(is);
+		return new JsonReaderImpl(reader);
 	}
 
 	@Override
 	public JsonReaderFactory createReaderFactory(Map<String, ?> config) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JsonReaderFactoryImpl(config);
 	}
 
 	@Override
 	public JsonWriter createWriter(Writer writer) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JsonWriterImpl(writer);
 	}
 
 	@Override
 	public JsonWriter createWriter(OutputStream os) {
-		// TODO Auto-generated method stub
-		return null;
+		OutputStreamWriter writger = new OutputStreamWriter(os);
+		return new JsonWriterImpl(writger);
 	}
 
 	@Override
 	public JsonWriterFactory createWriterFactory(Map<String, ?> config) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JsonWriterFactoryImpl(config);
 	}
 }
