@@ -4,6 +4,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.util.Collections;
 import java.util.Map;
 
 import javax.json.stream.JsonGenerator;
@@ -25,7 +26,11 @@ public class JsonGeneratorFactoryImpl implements JsonGeneratorFactory {
 	 */
 	// TODO to package private?
 	public JsonGeneratorFactoryImpl(Map<String, ?> config) {
-		this.config = config;
+		if (config != null) {
+			this.config = Collections.unmodifiableMap(config);
+		} else {
+			this.config = Collections.emptyMap();
+		}
 	}
 
 	@Override

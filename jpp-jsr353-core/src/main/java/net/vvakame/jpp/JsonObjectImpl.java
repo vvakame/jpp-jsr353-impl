@@ -1,6 +1,7 @@
 package net.vvakame.jpp;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -17,8 +18,17 @@ import javax.json.JsonValue;
  */
 public class JsonObjectImpl implements JsonObject {
 
-	Map<String, JsonValue> values = new LinkedHashMap<String, JsonValue>();
+	Map<String, JsonValue> object = new LinkedHashMap<String, JsonValue>();
 
+
+	/**
+	 * the constructor.
+	 * @param object
+	 * @category constructor
+	 */
+	public JsonObjectImpl(Map<String, JsonValue> object) {
+		this.object = Collections.unmodifiableMap(object);
+	}
 
 	@Override
 	public ValueType getValueType() {
@@ -26,100 +36,78 @@ public class JsonObjectImpl implements JsonObject {
 	}
 
 	@Override
-	public void clear() {
-		values.clear();
-	}
-
-	@Override
 	public boolean containsKey(Object key) {
-		return values.containsKey(key);
+		return object.containsKey(key);
 	}
 
 	@Override
 	public boolean containsValue(Object value) {
-		return values.containsValue(value);
+		return object.containsValue(value);
 	}
 
 	@Override
-	public Set<java.util.Map.Entry<String, JsonValue>> entrySet() {
-		return values.entrySet();
+	public Set<Map.Entry<String, JsonValue>> entrySet() {
+		return object.entrySet();
 	}
 
 	@Override
 	public JsonValue get(Object key) {
-		return values.get(key);
+		return object.get(key);
 	}
 
 	@Override
 	public boolean isEmpty() {
-		return values.isEmpty();
+		return object.isEmpty();
 	}
 
 	@Override
 	public Set<String> keySet() {
-		return values.keySet();
-	}
-
-	@Override
-	public JsonValue put(String key, JsonValue value) {
-		return values.put(key, value);
-	}
-
-	@Override
-	public void putAll(Map<? extends String, ? extends JsonValue> jsonObject) {
-		values.putAll(jsonObject);
-	}
-
-	@Override
-	public JsonValue remove(Object key) {
-		return values.remove(key);
+		return object.keySet();
 	}
 
 	@Override
 	public int size() {
-		return values.size();
+		return object.size();
 	}
 
 	@Override
 	public Collection<JsonValue> values() {
-		return values.values();
+		return object.values();
 	}
 
 	@Override
 	public JsonArray getJsonArray(String name) {
-		// TODO verify spec
-		return (JsonArray) values.get(name);
+		return (JsonArray) object.get(name);
 	}
 
 	@Override
 	public JsonObject getJsonObject(String name) {
-		// TODO verify spec
-		return (JsonObject) values.get(name);
+		return (JsonObject) object.get(name);
 	}
 
 	@Override
 	public JsonNumber getJsonNumber(String name) {
-		// TODO verify spec
-		return (JsonNumber) values.get(name);
+		return (JsonNumber) object.get(name);
 	}
 
 	@Override
 	public JsonString getJsonString(String name) {
-		// TODO verify spec
-		return (JsonString) values.get(name);
+		return (JsonString) object.get(name);
 	}
 
 	@Override
 	public String getString(String name) {
-		// TODO verify spec
-		return ((JsonString) values.get(name)).getString();
+		if (!object.containsKey(name)) {
+			throw new NullPointerException("JsonObject not has a key=" + name);
+		}
+		return ((JsonString) object.get(name)).getString();
 	}
 
 	@Override
 	public String getString(String name, String defaultValue) {
-		// TODO verify spec
-		if (values.containsKey(name)) {
-			return ((JsonString) values.get(name)).getString();
+		JsonString jsonString = (JsonString) object.get(name);
+		if (jsonString != null) {
+			return jsonString.getString();
 		} else {
 			return defaultValue;
 		}
@@ -127,15 +115,17 @@ public class JsonObjectImpl implements JsonObject {
 
 	@Override
 	public int getInt(String name) {
-		// TODO verify spec
-		return ((JsonNumber) values.get(name)).intValueExact();
+		if (!object.containsKey(name)) {
+			throw new NullPointerException("JsonObject not has a key=" + name);
+		}
+		return ((JsonNumber) object.get(name)).intValue();
 	}
 
 	@Override
 	public int getInt(String name, int defaultValue) {
-		// TODO verify spec
-		if (values.containsKey(name)) {
-			return ((JsonNumber) values.get(name)).intValueExact();
+		JsonNumber jsonNumber = (JsonNumber) object.get(name);
+		if (jsonNumber != null) {
+			return jsonNumber.intValue();
 		} else {
 			return defaultValue;
 		}
@@ -143,25 +133,26 @@ public class JsonObjectImpl implements JsonObject {
 
 	@Override
 	public boolean getBoolean(String name) {
-		// TODO verify spec
-		if (values.get(name).getValueType() == ValueType.TRUE) {
+		if (!object.containsKey(name)) {
+			throw new NullPointerException("JsonObject not has a key=" + name);
+		}
+		if (object.get(name).getValueType() == ValueType.TRUE) {
 			return true;
-		} else if (values.get(name).getValueType() == ValueType.FALSE) {
+		} else if (object.get(name).getValueType() == ValueType.FALSE) {
 			return false;
 		} else {
-			// TODO
+			// TODO check spec
 			throw new IllegalStateException();
 		}
 	}
 
 	@Override
 	public boolean getBoolean(String name, boolean defaultValue) {
-		// TODO verify spec
-		if (!values.containsKey(name)) {
+		if (!object.containsKey(name)) {
 			return defaultValue;
-		} else if (values.get(name).getValueType() == ValueType.TRUE) {
+		} else if (object.get(name).getValueType() == ValueType.TRUE) {
 			return true;
-		} else if (values.get(name).getValueType() == ValueType.FALSE) {
+		} else if (object.get(name).getValueType() == ValueType.FALSE) {
 			return false;
 		} else {
 			return defaultValue;
@@ -170,13 +161,29 @@ public class JsonObjectImpl implements JsonObject {
 
 	@Override
 	public boolean isNull(String name) {
-		// TODO verify spec
-		return !values.containsKey(name) || values.get(name).getValueType() == ValueType.NULL;
+		if (!object.containsKey(name)) {
+			throw new NullPointerException("JsonObject not has a key=" + name);
+		}
+		return object.get(name).getValueType() == ValueType.NULL;
 	}
 
-	void add(String name, JsonValue value) {
-		values.put(name, value);
+	@Override
+	public void clear() {
+		throw new UnsupportedOperationException("JsonObject is immutable. use JsonObjectBuilder");
 	}
 
-	// TODO equals, hashCode, toString
+	@Override
+	public JsonValue put(String key, JsonValue value) {
+		throw new UnsupportedOperationException("JsonObject is immutable. use JsonObjectBuilder");
+	}
+
+	@Override
+	public void putAll(Map<? extends String, ? extends JsonValue> jsonObject) {
+		throw new UnsupportedOperationException("JsonObject is immutable. use JsonObjectBuilder");
+	}
+
+	@Override
+	public JsonValue remove(Object key) {
+		throw new UnsupportedOperationException("JsonObject is immutable. use JsonObjectBuilder");
+	}
 }

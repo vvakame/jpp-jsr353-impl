@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 import javax.json.JsonArray;
+import javax.json.JsonException;
 import javax.json.JsonNumber;
 import javax.json.JsonObject;
 import javax.json.JsonString;
@@ -31,6 +32,7 @@ public class JsonWriterImpl implements JsonWriter {
 
 	@Override
 	public void writeArray(JsonArray array) {
+		// TODO IllegalStateException
 		try {
 			writer.write("[");
 			for (int i = 0; i < array.size(); i++) {
@@ -67,13 +69,13 @@ public class JsonWriterImpl implements JsonWriter {
 			}
 			writer.write("]");
 		} catch (IOException e) {
-			// TODO verify spec
-			throw new IllegalStateException(e);
+			throw new JsonException("raise IOException", e);
 		}
 	}
 
 	@Override
 	public void writeObject(JsonObject object) {
+		// TODO IllegalStateException
 		try {
 			writer.write("{");
 			String[] keys = object.keySet().toArray(new String[object.size()]);
@@ -113,13 +115,13 @@ public class JsonWriterImpl implements JsonWriter {
 			}
 			writer.write("}");
 		} catch (IOException e) {
-			// TODO verify spec
-			throw new IllegalStateException(e);
+			throw new JsonException("raise IOException", e);
 		}
 	}
 
 	@Override
 	public void write(JsonStructure value) {
+		// TODO IllegalStateException
 		switch (value.getValueType()) {
 			case OBJECT:
 				writeObject((JsonObject) value);
@@ -138,8 +140,7 @@ public class JsonWriterImpl implements JsonWriter {
 		try {
 			writer.close();
 		} catch (IOException e) {
-			// TODO
-			throw new RuntimeException(e);
+			throw new JsonException("raise IOException", e);
 		}
 	}
 

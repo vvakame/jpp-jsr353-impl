@@ -4,12 +4,17 @@ import java.io.IOException;
 import java.io.Writer;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.NoSuchElementException;
+import java.util.Set;
 
+import javax.json.JsonException;
+import javax.json.JsonString;
 import javax.json.JsonValue;
 import javax.json.stream.JsonGenerationException;
 import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonParser.Event;
+
+import net.vvakame.jpp.JsonArrayImpl;
+import net.vvakame.jpp.JsonObjectImpl;
 
 /**
  * Implementation for {@link JsonGenerator}.
@@ -79,6 +84,7 @@ public class JsonGeneratorImpl implements JsonGenerator {
 
 	@Override
 	public JsonGenerator writeStartObject() {
+		// TODO JsonGenerationException
 		try {
 			checkFirstElement();
 			writer.write("{");
@@ -86,29 +92,30 @@ public class JsonGeneratorImpl implements JsonGenerator {
 			eventStack.push(Event.START_OBJECT);
 			firstStack.push(true);
 		} catch (IOException e) {
-			throw new JsonGenerationException("raise IOException", e);
+			throw new JsonException("raise IOException", e);
 		}
 		return this;
 	}
 
 	@Override
 	public JsonGenerator writeStartObject(String key) {
+		// TODO JsonGenerationException
 		try {
 			checkFirstElement();
 			writeString(key);
-			writer.write(":");
-			writer.write("{");
+			writer.write(":{");
 
 			eventStack.push(Event.START_OBJECT);
 			firstStack.push(true);
 		} catch (IOException e) {
-			throw new JsonGenerationException("raise IOException", e);
+			throw new JsonException("raise IOException", e);
 		}
 		return this;
 	}
 
 	@Override
 	public JsonGenerator writeStartArray() {
+		// TODO JsonGenerationException
 		try {
 			checkFirstElement();
 			writer.write("[");
@@ -116,13 +123,14 @@ public class JsonGeneratorImpl implements JsonGenerator {
 			eventStack.push(Event.START_ARRAY);
 			firstStack.push(true);
 		} catch (IOException e) {
-			throw new JsonGenerationException("raise IOException", e);
+			throw new JsonException("raise IOException", e);
 		}
 		return this;
 	}
 
 	@Override
 	public JsonGenerator writeStartArray(String key) {
+		// TODO JsonGenerationException
 		try {
 			checkFirstElement();
 			writeString(key);
@@ -132,13 +140,14 @@ public class JsonGeneratorImpl implements JsonGenerator {
 			eventStack.push(Event.START_ARRAY);
 			firstStack.push(true);
 		} catch (IOException e) {
-			throw new JsonGenerationException("raise IOException", e);
+			throw new JsonException("raise IOException", e);
 		}
 		return this;
 	}
 
 	@Override
 	public JsonGenerator writeEnd() {
+		// TODO JsonGenerationException
 		try {
 			Event event = eventStack.pop();
 			firstStack.pop();
@@ -151,18 +160,76 @@ public class JsonGeneratorImpl implements JsonGenerator {
 					writer.write("]");
 					break;
 			}
-		} catch (NoSuchElementException e) {
-			throw new JsonGenerationException("raise NoSuchElementException", e);
 		} catch (IOException e) {
-			throw new JsonGenerationException("raise IOException", e);
+			throw new JsonException("raise IOException", e);
 		}
 		return this;
 	}
 
 	@Override
-	public JsonGenerator write(JsonValue arg0) {
-		// TODO Auto-generated method stub
-		return null;
+	public JsonGenerator write(JsonValue value) {
+		try {
+			checkInArray();
+			checkFirstElement();
+
+			if (value == null) {
+				writer.write("null");
+				return this;
+			}
+			switch (value.getValueType()) {
+				case FALSE:
+					writer.write("false");
+					return this;
+				case TRUE:
+					writer.write("true");
+					return this;
+				case NULL:
+					writer.write("null");
+					return this;
+				case STRING:
+					writeString(((JsonString) value).getString());
+					return this;
+				case NUMBER:
+					writer.write(value.toString());
+					return this;
+				case ARRAY: {
+					writer.write("[");
+					JsonArrayImpl jsonArray = (JsonArrayImpl) value;
+					int size = jsonArray.size();
+					for (int i = 0; i < size; i++) {
+						JsonValue child = jsonArray.get(i);
+						write(child);
+						if (i != size - 1) {
+							writer.write(",");
+						}
+					}
+					writer.write("]");
+				}
+					break;
+				case OBJECT: {
+					writer.write("{");
+					JsonObjectImpl jsonObject = (JsonObjectImpl) value;
+					Set<String> keySet = jsonObject.keySet();
+					int size = jsonObject.size();
+					int count = 0;
+					for (String childKey : keySet) {
+						JsonValue child = jsonObject.get(childKey);
+						writeString(childKey);
+						writer.write(":");
+						write(child);
+						if (count != size - 1) {
+							writer.write(",");
+						}
+						count++;
+					}
+					writer.write("}");
+				}
+					break;
+			}
+		} catch (IOException e) {
+			throw new JsonException("raise IOException", e);
+		}
+		return this;
 	}
 
 	@Override
@@ -172,7 +239,7 @@ public class JsonGeneratorImpl implements JsonGenerator {
 			checkFirstElement();
 			writeString(value);
 		} catch (IOException e) {
-			throw new JsonGenerationException("raise IOException", e);
+			throw new JsonException("raise IOException", e);
 		}
 		return this;
 	}
@@ -184,7 +251,7 @@ public class JsonGeneratorImpl implements JsonGenerator {
 			checkFirstElement();
 			writer.write(value.toString());
 		} catch (IOException e) {
-			throw new JsonGenerationException("raise IOException", e);
+			throw new JsonException("raise IOException", e);
 		}
 		return this;
 	}
@@ -196,7 +263,7 @@ public class JsonGeneratorImpl implements JsonGenerator {
 			checkFirstElement();
 			writer.write(value.toString());
 		} catch (IOException e) {
-			throw new JsonGenerationException("raise IOException", e);
+			throw new JsonException("raise IOException", e);
 		}
 		return this;
 	}
@@ -208,7 +275,7 @@ public class JsonGeneratorImpl implements JsonGenerator {
 			checkFirstElement();
 			writer.write(String.valueOf(value));
 		} catch (IOException e) {
-			throw new JsonGenerationException("raise IOException", e);
+			throw new JsonException("raise IOException", e);
 		}
 		return this;
 	}
@@ -220,7 +287,7 @@ public class JsonGeneratorImpl implements JsonGenerator {
 			checkFirstElement();
 			writer.write(String.valueOf(value));
 		} catch (IOException e) {
-			throw new JsonGenerationException("raise IOException", e);
+			throw new JsonException("raise IOException", e);
 		}
 		return this;
 	}
@@ -232,7 +299,7 @@ public class JsonGeneratorImpl implements JsonGenerator {
 			checkFirstElement();
 			writer.write(String.valueOf(value));
 		} catch (IOException e) {
-			throw new JsonGenerationException("raise IOException", e);
+			throw new JsonException("raise IOException", e);
 		}
 		return this;
 	}
@@ -244,15 +311,78 @@ public class JsonGeneratorImpl implements JsonGenerator {
 			checkFirstElement();
 			writer.write(String.valueOf(value));
 		} catch (IOException e) {
-			throw new JsonGenerationException("raise IOException", e);
+			throw new JsonException("raise IOException", e);
 		}
 		return this;
 	}
 
 	@Override
 	public JsonGenerator write(String key, JsonValue value) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			checkInObject();
+			checkFirstElement();
+
+			writeString(key);
+			writer.write(":");
+
+			if (value == null) {
+				writer.write("null");
+				return this;
+			}
+			switch (value.getValueType()) {
+				case FALSE:
+					writer.write("false");
+					return this;
+				case TRUE:
+					writer.write("true");
+					return this;
+				case NULL:
+					writer.write("null");
+					return this;
+				case STRING:
+					writeString(((JsonString) value).getString());
+					return this;
+				case NUMBER:
+					writer.write(value.toString());
+					return this;
+				case ARRAY: {
+					writer.write("[");
+					JsonArrayImpl jsonArray = (JsonArrayImpl) value;
+					int size = jsonArray.size();
+					for (int i = 0; i < size; i++) {
+						JsonValue child = jsonArray.get(i);
+						write(child);
+						if (i != size - 1) {
+							writer.write(",");
+						}
+					}
+					writer.write("]");
+				}
+					break;
+				case OBJECT: {
+					writer.write("{");
+					JsonObjectImpl jsonObject = (JsonObjectImpl) value;
+					Set<String> keySet = jsonObject.keySet();
+					int size = jsonObject.size();
+					int count = 0;
+					for (String childKey : keySet) {
+						JsonValue child = jsonObject.get(childKey);
+						writeString(childKey);
+						writer.write(":");
+						write(child);
+						if (count != size - 1) {
+							writer.write(",");
+						}
+						count++;
+					}
+					writer.write("}");
+				}
+					break;
+			}
+		} catch (IOException e) {
+			throw new JsonException("raise IOException", e);
+		}
+		return this;
 	}
 
 	@Override
@@ -269,7 +399,7 @@ public class JsonGeneratorImpl implements JsonGenerator {
 			writer.write(":");
 			writeString(value);
 		} catch (IOException e) {
-			throw new JsonGenerationException("raise IOException", e);
+			throw new JsonException("raise IOException", e);
 		}
 		return this;
 	}
@@ -288,7 +418,7 @@ public class JsonGeneratorImpl implements JsonGenerator {
 			writer.write(":");
 			writer.write(value.toString());
 		} catch (IOException e) {
-			throw new JsonGenerationException("raise IOException", e);
+			throw new JsonException("raise IOException", e);
 		}
 		return this;
 	}
@@ -307,7 +437,7 @@ public class JsonGeneratorImpl implements JsonGenerator {
 			writer.write(":");
 			writer.write(value.toString());
 		} catch (IOException e) {
-			throw new JsonGenerationException("raise IOException", e);
+			throw new JsonException("raise IOException", e);
 		}
 		return this;
 	}
@@ -326,7 +456,7 @@ public class JsonGeneratorImpl implements JsonGenerator {
 			writer.write(":");
 			writer.write(String.valueOf(value));
 		} catch (IOException e) {
-			throw new JsonGenerationException("raise IOException", e);
+			throw new JsonException("raise IOException", e);
 		}
 		return this;
 	}
@@ -345,7 +475,7 @@ public class JsonGeneratorImpl implements JsonGenerator {
 			writer.write(":");
 			writer.write(String.valueOf(value));
 		} catch (IOException e) {
-			throw new JsonGenerationException("raise IOException", e);
+			throw new JsonException("raise IOException", e);
 		}
 		return this;
 	}
@@ -364,7 +494,7 @@ public class JsonGeneratorImpl implements JsonGenerator {
 			writer.write(":");
 			writer.write(String.valueOf(value));
 		} catch (IOException e) {
-			throw new JsonGenerationException("raise IOException", e);
+			throw new JsonException("raise IOException", e);
 		}
 		return this;
 	}
@@ -383,7 +513,7 @@ public class JsonGeneratorImpl implements JsonGenerator {
 			writer.write(":");
 			writer.write(String.valueOf(value));
 		} catch (IOException e) {
-			throw new JsonGenerationException("raise IOException", e);
+			throw new JsonException("raise IOException", e);
 		}
 		return this;
 	}
@@ -395,7 +525,7 @@ public class JsonGeneratorImpl implements JsonGenerator {
 			checkInArray();
 			writer.write("null");
 		} catch (IOException e) {
-			throw new JsonGenerationException("raise IOException", e);
+			throw new JsonException("raise IOException", e);
 		}
 		return this;
 	}
@@ -413,7 +543,7 @@ public class JsonGeneratorImpl implements JsonGenerator {
 			writeString(key);
 			writer.write(":null");
 		} catch (IOException e) {
-			throw new JsonGenerationException("raise IOException", e);
+			throw new JsonException("raise IOException", e);
 		}
 		return this;
 	}

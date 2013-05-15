@@ -4,6 +4,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.util.Collections;
 import java.util.Map;
 
 import javax.json.JsonWriter;
@@ -24,7 +25,11 @@ public class JsonWriterFactoryImpl implements JsonWriterFactory {
 	 * @category constructor
 	 */
 	public JsonWriterFactoryImpl(Map<String, ?> config) {
-		this.config = config;
+		if (config != null) {
+			this.config = Collections.unmodifiableMap(config);
+		} else {
+			this.config = Collections.emptyMap();
+		}
 	}
 
 	@Override

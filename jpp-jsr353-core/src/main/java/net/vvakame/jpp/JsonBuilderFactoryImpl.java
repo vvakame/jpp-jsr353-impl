@@ -1,5 +1,6 @@
 package net.vvakame.jpp;
 
+import java.util.Collections;
 import java.util.Map;
 
 import javax.json.JsonArrayBuilder;
@@ -21,7 +22,11 @@ public class JsonBuilderFactoryImpl implements JsonBuilderFactory {
 	 * @category constructor
 	 */
 	public JsonBuilderFactoryImpl(Map<String, ?> config) {
-		this.config = config;
+		if (config != null) {
+			this.config = Collections.unmodifiableMap(config);
+		} else {
+			this.config = Collections.emptyMap();
+		}
 	}
 
 	@Override

@@ -3,11 +3,16 @@ package net.vvakame.stream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.nio.charset.Charset;
+import java.util.Collections;
 import java.util.Map;
 
+import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
+import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonParser;
 import javax.json.stream.JsonParserFactory;
 
@@ -26,7 +31,11 @@ public class JsonParserFactoryImpl implements JsonParserFactory {
 	 * @category constructor
 	 */
 	public JsonParserFactoryImpl(Map<String, ?> config) {
-		this.config = config;
+		if (config != null) {
+			this.config = Collections.unmodifiableMap(config);
+		} else {
+			this.config = Collections.emptyMap();
+		}
 	}
 
 	@Override
@@ -41,14 +50,22 @@ public class JsonParserFactoryImpl implements JsonParserFactory {
 
 	@Override
 	public JsonParser createParser(JsonObject jsonObject) {
-		// TODO Auto-generated method stub
-		return null;
+		StringWriter writer = new StringWriter();
+		JsonGenerator generator = Json.createGenerator(writer);
+		generator.write(jsonObject);
+		String json = writer.toString();
+		StringReader reader = new StringReader(json);
+		return createParser(reader);
 	}
 
 	@Override
 	public JsonParser createParser(JsonArray jsonArray) {
-		// TODO Auto-generated method stub
-		return null;
+		StringWriter writer = new StringWriter();
+		JsonGenerator generator = Json.createGenerator(writer);
+		generator.write(jsonArray);
+		String json = writer.toString();
+		StringReader reader = new StringReader(json);
+		return createParser(reader);
 	}
 
 	@Override

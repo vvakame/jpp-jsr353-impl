@@ -1,6 +1,10 @@
 package net.vvakame.jpp;
 
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -8,6 +12,7 @@ import javax.json.JsonReader;
 import javax.json.JsonStructure;
 import javax.json.JsonValue;
 import javax.json.stream.JsonParser.Event;
+import javax.json.stream.JsonParsingException;
 
 import net.vvakame.stream.JsonParserImpl;
 
@@ -25,49 +30,51 @@ public class JsonReaderImpl implements JsonReader {
 	 * @param reader
 	 * @category constructor
 	 */
+	// TODO to package private?
 	public JsonReaderImpl(Reader reader) {
 		parser = new JsonParserImpl(reader);
 	}
 
 	@Override
 	public JsonStructure read() {
+		// TODO raise JsonException by raise IOException
+		// TODO raise IllegalStateException
 		Event first = parser.next();
 		if (first == Event.START_OBJECT) {
 			return readObjectHelper();
 		} else if (first == Event.START_ARRAY) {
 			return readArrayHelper();
 		} else {
-			// TODO verify spec
-			throw new IllegalStateException();
+			throw new JsonParsingException("unexpected event. event=" + first, parser.getLocation());
 		}
 	}
 
 	@Override
 	public JsonObject readObject() {
+		// TODO same as read() method.
 		Event first = parser.next();
 		if (first == Event.START_OBJECT) {
 			return readObjectHelper();
 		} else {
-			// TODO verify spec
-			throw new IllegalStateException();
+			throw new JsonParsingException("unexpected event. event=" + first, parser.getLocation());
 		}
 	}
 
 	@Override
 	public JsonArray readArray() {
+		// TODO same as read() method.
 		Event first = parser.next();
 		if (first == Event.START_ARRAY) {
 			return readArrayHelper();
 		} else {
-			// TODO verify spec
-			throw new IllegalStateException();
+			throw new JsonParsingException("unexpected event. event=" + first, parser.getLocation());
 		}
 	}
 
 	JsonObject readObjectHelper() {
 		// already read START_OBJECT
 
-		JsonObjectImpl jsonObject = new JsonObjectImpl();
+		Map<String, JsonValue> jsonObject = new LinkedHashMap<String, JsonValue>();
 		Event next;
 		while (true) {
 			next = parser.next();
@@ -75,7 +82,7 @@ public class JsonReaderImpl implements JsonReader {
 			if (next == Event.KEY_NAME) {
 				key = parser.getString();
 			} else if (next == Event.END_OBJECT) {
-				return jsonObject;
+				return new JsonObjectImpl(jsonObject);
 			} else {
 				// TODO verify spec
 				throw new IllegalStateException();
@@ -115,33 +122,34 @@ public class JsonReaderImpl implements JsonReader {
 	JsonArray readArrayHelper() {
 		// already read START_ARRAY
 
-		JsonArrayImpl jsonArray = new JsonArrayImpl();
+		List<JsonValue> list = new ArrayList<JsonValue>();
+
 		while (true) {
 			switch (parser.next()) {
 				case VALUE_STRING:
-					jsonArray.add(new JsonStringImpl(parser.getString()));
+					list.add(new JsonStringImpl(parser.getString()));
 					break;
 				case VALUE_NUMBER:
-					jsonArray.add(new JsonNumberImpl(parser.getBigDecimal()));
+					list.add(new JsonNumberImpl(parser.getBigDecimal()));
 					break;
 				case VALUE_TRUE:
-					jsonArray.add(JsonValue.TRUE);
+					list.add(JsonValue.TRUE);
 					break;
 				case VALUE_FALSE:
-					jsonArray.add(JsonValue.FALSE);
+					list.add(JsonValue.FALSE);
 					break;
 				case VALUE_NULL:
-					jsonArray.add(JsonValue.NULL);
+					list.add(JsonValue.NULL);
 					break;
 
 				case END_ARRAY:
-					return jsonArray;
+					return new JsonArrayImpl(list);
 
 				case START_OBJECT:
-					jsonArray.add(readObjectHelper());
+					list.add(readObjectHelper());
 					break;
 				case START_ARRAY:
-					jsonArray.add(readArrayHelper());
+					list.add(readArrayHelper());
 					break;
 
 				default:

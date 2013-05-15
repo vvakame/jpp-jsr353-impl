@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.math.BigDecimal;
 
+import javax.json.JsonException;
 import javax.json.stream.JsonLocation;
 import javax.json.stream.JsonParser;
 import javax.json.stream.JsonParsingException;
@@ -58,7 +59,7 @@ public class JsonParserImpl implements JsonParser {
 		try {
 			reader.close();
 		} catch (IOException e) {
-			throw new JsonParsingException("raise IOException", e, getLocation());
+			throw new JsonException("raise IOException", e);
 		}
 	}
 
@@ -299,33 +300,59 @@ public class JsonParserImpl implements JsonParser {
 			readFuture = true;
 
 		} catch (IOException e) {
-			throw new JsonParsingException("raise IOException", e, getLocation());
+			throw new JsonException("raise IOException", e);
 		}
 	}
 
 	@Override
 	public int getInt() {
-		return currentBigDecimal.intValueExact();
+		if (currentEvent != Event.VALUE_NUMBER) {
+			throw new IllegalStateException("event not VALUE_NUMBER, current=" + currentEvent);
+		} else {
+			return currentBigDecimal.intValue();
+		}
 	}
 
 	@Override
 	public long getLong() {
-		return currentBigDecimal.longValueExact();
+		if (currentEvent != Event.VALUE_NUMBER) {
+			throw new IllegalStateException("event not VALUE_NUMBER, current=" + currentEvent);
+		} else {
+			return currentBigDecimal.longValue();
+		}
 	}
 
 	@Override
 	public BigDecimal getBigDecimal() {
-		return currentBigDecimal;
+		if (currentEvent != Event.VALUE_NUMBER) {
+			throw new IllegalStateException("event not VALUE_NUMBER, current=" + currentEvent);
+		} else {
+			return currentBigDecimal;
+		}
 	}
 
 	@Override
 	public boolean isIntegralNumber() {
-		return currentIntegralNumber;
+		if (currentEvent != Event.VALUE_NUMBER) {
+			throw new IllegalStateException("event not VALUE_NUMBER, current=" + currentEvent);
+		} else {
+			return currentIntegralNumber;
+		}
 	}
 
 	@Override
 	public String getString() {
-		return currentValueStr;
+		switch (currentEvent) {
+			case KEY_NAME:
+			case VALUE_STRING:
+				return currentValueStr;
+			case VALUE_NUMBER:
+				return currentBigDecimal.toString();
+			default:
+				throw new IllegalStateException(
+						"event not KEY_NAME or VALUE_STRING or VALUE_NUMBER, current="
+								+ currentEvent);
+		}
 	}
 
 
