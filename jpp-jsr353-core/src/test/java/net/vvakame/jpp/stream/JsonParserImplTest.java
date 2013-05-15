@@ -1,4 +1,4 @@
-package net.vvakame.stream;
+package net.vvakame.jpp.stream;
 
 import java.io.Reader;
 import java.io.StringReader;
@@ -6,6 +6,8 @@ import java.io.StringReader;
 import javax.json.spi.JsonProvider;
 import javax.json.stream.JsonParser;
 import javax.json.stream.JsonParser.Event;
+
+import net.vvakame.jpp.stream.JsonParserImpl;
 
 import org.junit.Test;
 

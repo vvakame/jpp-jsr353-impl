@@ -1,4 +1,4 @@
-package net.vvakame.stream;
+package net.vvakame.jpp.stream;
 
 import java.io.IOException;
 import java.io.Writer;

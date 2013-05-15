@@ -28,10 +28,10 @@ import net.vvakame.jpp.JsonReaderFactoryImpl;
 import net.vvakame.jpp.JsonReaderImpl;
 import net.vvakame.jpp.JsonWriterFactoryImpl;
 import net.vvakame.jpp.JsonWriterImpl;
-import net.vvakame.stream.JsonGeneratorFactoryImpl;
-import net.vvakame.stream.JsonGeneratorImpl;
-import net.vvakame.stream.JsonParserFactoryImpl;
-import net.vvakame.stream.JsonParserImpl;
+import net.vvakame.jpp.stream.JsonGeneratorFactoryImpl;
+import net.vvakame.jpp.stream.JsonGeneratorImpl;
+import net.vvakame.jpp.stream.JsonParserFactoryImpl;
+import net.vvakame.jpp.stream.JsonParserImpl;
 
 /**
  * Implementation for {@link JsonProvider}.

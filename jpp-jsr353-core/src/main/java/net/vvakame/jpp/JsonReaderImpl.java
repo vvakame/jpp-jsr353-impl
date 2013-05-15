@@ -14,7 +14,7 @@ import javax.json.JsonValue;
 import javax.json.stream.JsonParser.Event;
 import javax.json.stream.JsonParsingException;
 
-import net.vvakame.stream.JsonParserImpl;
+import net.vvakame.jpp.stream.JsonParserImpl;
 
 /**
  * Implementation for {@link JsonReader}.

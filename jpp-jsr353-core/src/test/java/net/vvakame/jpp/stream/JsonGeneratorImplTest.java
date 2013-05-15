@@ -1,4 +1,4 @@
-package net.vvakame.stream;
+package net.vvakame.jpp.stream;
 
 import java.io.StringWriter;
 import java.io.Writer;
@@ -11,6 +11,7 @@ import javax.json.stream.JsonGenerator;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import net.vvakame.jpp.stream.JsonGeneratorImpl;
 
 import org.junit.Test;
 
