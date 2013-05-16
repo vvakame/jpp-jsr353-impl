@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>jpp-annotation</artifactId>
+	<artifactId>jpp-extention</artifactId>
 	<packaging>jar</packaging>
 
 	<parent>
@@ -14,11 +14,10 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>net.vvakame</groupId>
-			<artifactId>jpp-extention</artifactId>
-			<version>${project.version}</version>
+			<groupId>javax.json</groupId>
+			<artifactId>javax.json-api</artifactId>
+			<version>1.0-b06</version>
 		</dependency>
-	</dependencies>
-
+	</dependencies>	
 </project>
 

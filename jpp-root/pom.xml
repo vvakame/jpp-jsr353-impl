@@ -84,6 +84,7 @@
 	<modules>
 		<module>../jpp-parent</module>
 		<module>../jpp-jsr353-core</module>
+		<module>../jpp-extention</module>
 		<module>../jpp-annotation</module>
 		<module>../jpp-processor</module>
 	</modules>
