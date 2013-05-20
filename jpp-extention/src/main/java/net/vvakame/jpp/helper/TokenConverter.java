@@ -4,7 +4,6 @@ import java.io.Writer;
 
 import javax.json.JsonException;
 import javax.json.stream.JsonGenerationException;
-import javax.json.stream.JsonParser;
 import javax.json.stream.JsonParsingException;
 
 import net.vvakame.jpp.annotation.JsonKey;
@@ -21,7 +20,7 @@ public class TokenConverter<T> {
 
 	/**
 	 * For JSON deserialize.
-	 * @param parser {@link JsonParser}
+	 * @param parser {@link JsonParserExtender}
 	 * @param listener {@link OnJsonObjectAddListener} for sequential processing
 	 * @return deserialized instance
 	 * @throws JsonException if an i/o error occurs (IOException
@@ -30,8 +29,8 @@ public class TokenConverter<T> {
 	 * when advancing to next state.
 	 * @author vvakame
 	 */
-	public T parse(JsonParser parser, OnJsonObjectAddListener listener) throws JsonException,
-			JsonParsingException {
+	public T parse(JsonParserExtender parser, OnJsonObjectAddListener listener)
+			throws JsonException, JsonParsingException {
 		throw new UnsupportedOperationException("if you use this method. override it.");
 	}
 
