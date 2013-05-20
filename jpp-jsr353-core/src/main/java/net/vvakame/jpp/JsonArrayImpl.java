@@ -129,9 +129,9 @@ public class JsonArrayImpl implements JsonArray {
 
 	@Override
 	public String getString(int index) {
-		JsonString jsonString = (JsonString) list.get(index);
-		if (jsonString != null) {
-			return jsonString.getString();
+		JsonString value = (JsonString) list.get(index);
+		if (value != null) {
+			return value.getString();
 		} else {
 			return null;
 		}
@@ -139,9 +139,9 @@ public class JsonArrayImpl implements JsonArray {
 
 	@Override
 	public String getString(int index, String defaultValue) {
-		JsonValue value = list.get(index);
+		JsonString value = (JsonString) list.get(index);
 		if (value != null) {
-			return ((JsonString) value).getString();
+			return value.getString();
 		} else {
 			return defaultValue;
 		}
@@ -154,9 +154,9 @@ public class JsonArrayImpl implements JsonArray {
 
 	@Override
 	public int getInt(int index, int defaultValue) {
-		JsonValue value = list.get(index);
+		JsonNumber value = (JsonNumber) list.get(index);
 		if (value != null) {
-			return ((JsonNumber) list.get(index)).intValue();
+			return value.intValue();
 		} else {
 			return defaultValue;
 		}
