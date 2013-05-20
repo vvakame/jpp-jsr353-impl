@@ -23,6 +23,11 @@
 		</dependency>
 		<dependency>
 			<groupId>net.vvakame</groupId>
+			<artifactId>jpp-extention</artifactId>
+			<version>${jpp.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.vvakame</groupId>
 			<artifactId>jpp-processor</artifactId>
 			<version>${jpp.version}</version>
 			<scope>provided</scope>
