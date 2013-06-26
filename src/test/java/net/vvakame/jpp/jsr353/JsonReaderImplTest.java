@@ -1,4 +1,4 @@
-package net.vvakame.jpp;
+package net.vvakame.jpp.jsr353;
 
 import java.io.Reader;
 import java.io.StringReader;
@@ -7,6 +7,8 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.spi.JsonProvider;
+
+import net.vvakame.jpp.jsr353.JsonReaderImpl;
 
 import org.junit.Test;
 

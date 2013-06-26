@@ -1,4 +1,4 @@
-package net.vvakame.jpp.stream;
+package net.vvakame.jpp.jsr353;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -13,8 +13,6 @@ import javax.json.stream.JsonGenerationException;
 import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonParser.Event;
 
-import net.vvakame.jpp.JsonArrayImpl;
-import net.vvakame.jpp.JsonObjectImpl;
 
 /**
  * Implementation for {@link JsonGenerator}.

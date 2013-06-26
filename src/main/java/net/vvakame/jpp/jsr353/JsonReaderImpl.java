@@ -1,4 +1,4 @@
-package net.vvakame.jpp;
+package net.vvakame.jpp.jsr353;
 
 import java.io.Reader;
 import java.util.ArrayList;
@@ -14,7 +14,6 @@ import javax.json.JsonValue;
 import javax.json.stream.JsonParser.Event;
 import javax.json.stream.JsonParsingException;
 
-import net.vvakame.jpp.stream.JsonParserImpl;
 
 /**
  * Implementation for {@link JsonReader}.

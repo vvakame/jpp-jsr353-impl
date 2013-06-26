@@ -1,4 +1,4 @@
-package net.vvakame.jpp.spi;
+package net.vvakame.jpp.jsr353;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -21,17 +21,6 @@ import javax.json.stream.JsonGeneratorFactory;
 import javax.json.stream.JsonParser;
 import javax.json.stream.JsonParserFactory;
 
-import net.vvakame.jpp.JsonArrayBuilderImpl;
-import net.vvakame.jpp.JsonBuilderFactoryImpl;
-import net.vvakame.jpp.JsonObjectBuilderImpl;
-import net.vvakame.jpp.JsonReaderFactoryImpl;
-import net.vvakame.jpp.JsonReaderImpl;
-import net.vvakame.jpp.JsonWriterFactoryImpl;
-import net.vvakame.jpp.JsonWriterImpl;
-import net.vvakame.jpp.stream.JsonGeneratorFactoryImpl;
-import net.vvakame.jpp.stream.JsonGeneratorImpl;
-import net.vvakame.jpp.stream.JsonParserFactoryImpl;
-import net.vvakame.jpp.stream.JsonParserImpl;
 
 /**
  * Implementation for {@link JsonProvider}.

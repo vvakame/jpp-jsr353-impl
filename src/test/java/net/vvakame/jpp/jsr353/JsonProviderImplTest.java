@@ -1,6 +1,8 @@
-package net.vvakame.jpp.spi;
+package net.vvakame.jpp.jsr353;
 
 import javax.json.spi.JsonProvider;
+
+import net.vvakame.jpp.jsr353.JsonProviderImpl;
 
 import org.junit.Test;
 

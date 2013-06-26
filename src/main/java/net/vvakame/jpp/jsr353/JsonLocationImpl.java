@@ -1,4 +1,4 @@
-package net.vvakame.jpp.stream;
+package net.vvakame.jpp.jsr353;
 
 import javax.json.stream.JsonLocation;
 

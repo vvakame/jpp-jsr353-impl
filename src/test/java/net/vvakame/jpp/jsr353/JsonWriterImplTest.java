@@ -1,4 +1,4 @@
-package net.vvakame.jpp;
+package net.vvakame.jpp.jsr353;
 
 import java.io.StringWriter;
 import java.io.Writer;
@@ -7,6 +7,8 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonWriter;
 import javax.json.spi.JsonProvider;
+
+import net.vvakame.jpp.jsr353.JsonWriterImpl;
 
 import org.junit.Test;
 

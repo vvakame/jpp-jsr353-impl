@@ -1,4 +1,4 @@
-package net.vvakame.jpp;
+package net.vvakame.jpp.jsr353;
 
 import javax.json.JsonString;
 
